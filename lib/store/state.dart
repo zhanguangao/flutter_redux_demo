@@ -1,33 +1,33 @@
 
-import 'package:flutter_redux_demo/store/count.dart';
+import 'package:flutter_redux_demo/store/counter.dart';
 
 class AppState {
-  final CountState countState;
+  final CounterState counter;
 
   AppState({
-    this.countState,
+    this.counter,
   });
 
-  static AppState initialState() {
+  static AppState initial() {
     return AppState(
-      countState: CountState.initialState(), 
+      counter: CounterState.initial(), 
     );
   }
 
   AppState copyWith({
-    CountState countState
+    CounterState counter
   }) {
     return AppState(
-      countState: countState ?? this.countState,
+      counter: counter ?? this.counter,
     );
   }
 
   //To only save parts of your state, simply omit the fields that you wish to not save from your serializer.
   ////when state is null, it will throw "The method '[]' was called on null".
   static AppState fromJson(dynamic json) {
-    return json == null ? AppState.initialState() : AppState(countState: json['countState']);
+    return json == null ? AppState.initial() : AppState(counter: CounterState.fromJson(json['counter']));
   }
 
-  dynamic toJson() => { 'countState': countState };
+  dynamic toJson() => { 'counter': counter };
 }
 

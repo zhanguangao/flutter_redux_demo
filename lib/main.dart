@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_redux_demo/actions/count.dart';
+import 'package:flutter_redux_demo/actions/counter.dart';
 import 'package:flutter_redux_demo/store/state.dart';
 import 'package:flutter_redux_demo/view_modal.dart';
 import 'package:flutter_redux_demo/store/config.dart';
@@ -10,17 +10,17 @@ import 'package:flutter_redux_demo/store/config.dart';
 void main() async{    
   final store = await configureStore();
 
-  return runApp(new FlutterReduxApp(
+  return runApp(new FlutterReduxDemo(
     title: 'Flutter Redux Demo',
     store: store
   ));
 }
 
-class FlutterReduxApp extends StatelessWidget {
+class FlutterReduxDemo extends StatelessWidget {
   final Store<AppState> store;
   final String title;
 
-  FlutterReduxApp({Key key, this.store, this.title}) : super(key: key);
+  FlutterReduxDemo({Key key, this.store, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,6 @@ class FlutterReduxApp extends StatelessWidget {
           ),
         )
       )
-
     );
   }
 }
@@ -67,8 +66,8 @@ class SimpleText extends StatelessWidget {
         );
       },
       builder: (context, vm) {
-        String count = vm.state.countState.count.toString();
-        String clickCount = vm.state.countState.clickCount.toString();
+        String count = vm.state.counter.count.toString();
+        String clickCount = vm.state.counter.clickCount.toString();
 
         return Text(
           'count: $count, clickCount: $clickCount',
@@ -79,7 +78,6 @@ class SimpleText extends StatelessWidget {
   }
 }
 
-
 class AddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -87,9 +85,7 @@ class AddButton extends StatelessWidget {
       converter: (store) {
         return AppStateViewModel(onClick: () {
           store.dispatch(new IncrementAction(1));
-          store.dispatch(clickCount());
-          // store.dispatch(increment(1));
-          // store.dispatch(clickCount());
+          store.dispatch(new ClickCountAction());
         });
       },
       builder: (context, vm) {
@@ -114,7 +110,7 @@ class AddAsyncButton extends StatelessWidget {
       converter: (store) {
         return  () {
           store.dispatch(asyncIncrement(1));
-          store.dispatch(clickCount());
+          store.dispatch(new ClickCountAction());
         };
       },
       builder: (context, callback) {
@@ -139,8 +135,7 @@ class DesButton extends StatelessWidget {
       converter: (store) {
         return AppStateViewModel(onClick: () {
           store.dispatch(new DecrementAction(1));
-          // store.dispatch(decrement(1));
-          // store.dispatch(clickCount());
+          store.dispatch(new ClickCountAction());
         });
       },
       builder: (context, vm) {
