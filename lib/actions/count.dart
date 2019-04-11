@@ -3,18 +3,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:flutter_redux_demo/actions/types.dart';
 import 'package:flutter_redux_demo/store/state.dart';
 
-
-class IncrementAction {
-  final int offset;
-  IncrementAction(this.offset);
-}
-
-class DecrementAction {
-  final int offset;
-  DecrementAction(this.offset);
-}
-
-
 increment(int offset) {
   return {
     'type': INCREMENT,

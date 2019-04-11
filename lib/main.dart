@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_redux_demo/actions/count.dart';
 import 'package:flutter_redux_demo/store/state.dart';
 import 'package:flutter_redux_demo/view_modal.dart';
@@ -67,8 +67,8 @@ class SimpleText extends StatelessWidget {
         );
       },
       builder: (context, vm) {
-        String count = vm.state.countState.count.toString();
-        String clickCount = vm.state.countState.clickCount.toString();
+        String count = vm.state.count.toString();
+        String clickCount = vm.state.clickCount.toString();
 
         return Text(
           'count: $count, clickCount: $clickCount',
@@ -86,10 +86,8 @@ class AddButton extends StatelessWidget {
     return StoreConnector<AppState, AppStateViewModel>(
       converter: (store) {
         return AppStateViewModel(onClick: () {
-          store.dispatch(new IncrementAction(1));
+          store.dispatch(increment(1));
           store.dispatch(clickCount());
-          // store.dispatch(increment(1));
-          // store.dispatch(clickCount());
         });
       },
       builder: (context, vm) {
@@ -138,9 +136,8 @@ class DesButton extends StatelessWidget {
     return StoreConnector<AppState, AppStateViewModel>(
       converter: (store) {
         return AppStateViewModel(onClick: () {
-          store.dispatch(new DecrementAction(1));
-          // store.dispatch(decrement(1));
-          // store.dispatch(clickCount());
+          store.dispatch(decrement(1));
+          store.dispatch(clickCount());
         });
       },
       builder: (context, vm) {

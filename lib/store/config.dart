@@ -15,14 +15,7 @@ configureStore() async{
     debug: true
   );
 
-  var initialState;
-  try {
-    initialState = await persistor.load();
-    print('initialState:$initialState');
-
-  }catch (e) {  //when state is null, it will throw "The method '[]' was called on null".
-    print('redux_persist exception: $e');
-  }
+  final initialState = await persistor.load();
 
   final store = new Store<AppState>(
     appReducer, 
