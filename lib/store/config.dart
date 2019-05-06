@@ -12,7 +12,7 @@ configureStore() async{
     storage: FlutterStorage(),
     serializer: JsonSerializer<AppState>(AppState.fromJson), 
     throttleDuration: Duration(seconds: 2),   //which will throttle saving to disk to prevent excessive writing
-    debug: true
+    debug: false
   );
 
   final initialState = await persistor.load();

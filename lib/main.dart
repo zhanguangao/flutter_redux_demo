@@ -2,59 +2,118 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux_demo/actions/counter.dart';
+import 'package:flutter_redux_demo/actions/theme.dart';
 import 'package:flutter_redux_demo/store/state.dart';
-import 'package:flutter_redux_demo/view_modal.dart';
+import 'package:flutter_redux_demo/store/view_modal.dart';
 import 'package:flutter_redux_demo/store/config.dart';
 
 
 void main() async{    
   final store = await configureStore();
-
-  return runApp(new FlutterReduxDemo(
-    title: 'Flutter Redux Demo',
+  return runApp(new FlutterReduxDemo(   
     store: store
   ));
 }
 
 class FlutterReduxDemo extends StatelessWidget {
-  final Store<AppState> store;
-  final String title;
+  final Store<AppState> store;  
 
-  FlutterReduxDemo({Key key, this.store, this.title}) : super(key: key);
+  FlutterReduxDemo({Key key, this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new StoreProvider<AppState>(
       store: store,
-      child: new MaterialApp(
-        theme: new ThemeData.light(),
-        title: title,
-        home: new Scaffold(
-          appBar: new AppBar(
-            title: new Text(title),
-          ),
-          body: new Center(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Text('You have pushed the button this many times:'),
-                SimpleText(),
-              ],
-            ),
-          ),
-          floatingActionButton: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              AddButton(),
-              DesButton(),
-              AddAsyncButton(),
-            ],
-          ),
-        )
-      )
+      child: Main(title: 'Flutter Redux Demo',)
     );
   }
 }
+
+class Choice {
+  final String title;
+  const Choice({this.title}); 
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Blue'), 
+  const Choice(title: 'Red'),  
+  const Choice(title: 'green'),
+  const Choice(title: 'orange'),
+  const Choice(title: 'Black'),
+];
+
+const MAP_COLOR = { 
+  'Red': Colors.red,
+  'Blue': Colors.blue,
+  'orange': Colors.orange,
+  'green': Colors.green,
+  'Black': Colors.black,
+};
+
+
+class Main extends StatelessWidget {
+  final String title;
+  Main({Key key, this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, AppStateViewModel>(
+      converter: (store) {
+        return AppStateViewModel(
+          state: store.state,
+          onClickWithParam: (primaryColor) {
+            store.dispatch(new ChangeThemeAction(primaryColor));
+          },
+        );
+      },
+      builder: (context, vm) {
+        return new MaterialApp(
+          theme: new ThemeData(primaryColor: MAP_COLOR[vm.state.theme.primaryColor]),
+          title: title,        
+          home: new Scaffold(
+            appBar: new AppBar(
+              title: new Text(title),
+              actions:<Widget> [
+                 PopupMenuButton<Choice>(
+                    onSelected: (Choice choice) {
+                      vm.onClickWithParam(choice.title);
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return choices.map((Choice choice) {
+                        return PopupMenuItem<Choice>(
+                          value: choice,
+                          child: Text(choice.title),
+                        );
+                      }).toList();
+                    },
+                  ),             
+
+              ],
+            ),
+            body: new Center(
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Text('You have pushed the button this many times:'),
+                  SimpleText(),
+                ],
+              ),
+            ),            
+            floatingActionButton: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                AddButton(),
+                DesButton(),
+                AddAsyncButton(),
+              ],
+            ),
+          )
+        );
+      },
+    );
+  }
+}
+
 
 class SimpleText extends StatelessWidget {
   @override
