@@ -168,8 +168,7 @@ class AddAsyncButton extends StatelessWidget {
     return StoreConnector<AppState, VoidCallback>(
       converter: (store) {
         return  () {
-          store.dispatch(asyncIncrement(1));
-          store.dispatch(new ClickCountAction());
+          store.dispatch(asyncIncrement(1));         
         };
       },
       builder: (context, callback) {

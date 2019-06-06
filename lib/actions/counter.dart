@@ -24,5 +24,6 @@ ThunkAction<AppState> asyncIncrement(int offset) {
   return (Store<AppState> store) async {
     await Future.delayed(Duration(seconds: 1));
     store.dispatch(new IncrementAction(1));
+    store.dispatch(new ClickCountAction());
   };
 }
